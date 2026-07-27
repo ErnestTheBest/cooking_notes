@@ -1,30 +1,38 @@
-# Кухонные записки
+# Kitchen Notes
 
-## Локальный просмотр
+**[Open the live site →](https://ernestthebest.github.io/cooking_notes/)**
+
+A personal collection of cooking methods, ingredient quantities, equipment
+notes, and observations. The site is built with Astro from Markdown files and
+published automatically with GitHub Pages.
+
+## Local preview
+
+Start the development site with Docker Compose:
 
 ```sh
 docker compose up --build
 ```
 
-Сайт откроется на <http://localhost:4324>. Изменения Markdown-файлов
-подхватываются автоматически.
+Open <http://localhost:4324>. Changes to Markdown files are reflected
+automatically.
 
-Другой локальный порт можно задать так:
+To use a different local port:
 
 ```sh
 SITE_PORT=4321 docker compose up --build
 ```
 
-Проверить финальную статическую сборку внутри контейнера:
+To verify the final static build inside the container:
 
 ```sh
 docker compose run --rm site npm run build
 ```
 
-## Добавление заметки
+## Adding a cooking note
 
-Заметки находятся в `src/content/notes/`. После изменения или добавления
-Markdown-файла достаточно отправить его в ветку `main`:
+Notes are stored in `src/content/notes/`. After adding or editing a Markdown
+file, commit and push the change to `main`:
 
 ```sh
 git add src/content/notes
@@ -32,7 +40,5 @@ git commit -m "Add cooking note"
 git push
 ```
 
-GitHub Actions сам соберёт Astro и опубликует новую версию на GitHub Pages.
-
-При первом запуске репозитория в GitHub нужно один раз открыть
-`Settings → Pages` и выбрать `GitHub Actions` в качестве источника публикации.
+GitHub Actions builds the Astro site and publishes the updated version to
+[GitHub Pages](https://ernestthebest.github.io/cooking_notes/) automatically.
