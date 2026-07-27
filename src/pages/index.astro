@@ -1,0 +1,215 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const notes = (await getCollection("notes")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const methods = ["всё", ...new Set(notes.flatMap((note) => note.data.methods))];
+const products = ["всё", ...new Set(notes.map((note) => note.data.mainIngredient))];
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+const homeHref = `${basePath}/`;
+---
+
+<BaseLayout>
+  <main>
+    <header class="site-header">
+      <a class="wordmark" href={homeHref} aria-label="Кухонные записки, главная">
+        КЗ<span aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Способы · ингредиенты · наблюдения</p>
+      <h1>Кухонные<br />записки</h1>
+      <div class="hero-bottom">
+        <p>
+          Как я готовлю на самом деле — с точными количествами, режимами
+          плиты и пометками на следующий раз.
+        </p>
+      </div>
+    </section>
+
+    <section class="catalogue" aria-labelledby="catalogue-title">
+      <div class="search-row">
+        <h2 id="catalogue-title">Поиск</h2>
+        <label class="search">
+          <span class="sr-only">Поиск по заметкам</span>
+          <span aria-hidden="true">⌕</span>
+          <input
+            id="note-search"
+            type="search"
+            placeholder="Найти блюдо или ингредиент"
+            autocomplete="off"
+          />
+        </label>
+      </div>
+
+      <div class="filter-panel">
+        <div class="filter-group">
+          <span class="filter-label">Способ</span>
+          <div class="filters" aria-label="Фильтр по способу приготовления">
+            {
+              methods.map((method, index) => (
+                <button
+                  class:list={["filter", "method-filter", { active: index === 0 }]}
+                  type="button"
+                  data-method={method}
+                  aria-pressed={index === 0 ? "true" : "false"}
+                >
+                  {method}
+                </button>
+              ))
+            }
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Продукт</span>
+          <div class="filters" aria-label="Фильтр по главному продукту">
+            {
+              products.map((product, index) => (
+                <button
+                  class:list={["filter", "product-filter", { active: index === 0 }]}
+                  type="button"
+                  data-product={product}
+                  aria-pressed={index === 0 ? "true" : "false"}
+                >
+                  {product}
+                </button>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="notes-grid" id="notes-grid">
+        {
+          notes.map((note) => (
+            <a
+              class:list={[
+                "note-card",
+                { "no-meta": !note.data.servings && !note.data.time },
+              ]}
+              href={`${basePath}/notes/${note.id}/`}
+              data-methods={note.data.methods.join(" ")}
+              data-product={note.data.mainIngredient}
+              data-search={[
+                note.data.title,
+                note.data.summary,
+                ...note.data.tags,
+                ...note.data.ingredients.map((ingredient) => ingredient.name),
+              ]
+                .join(" ")
+                .toLocaleLowerCase("ru")}
+            >
+              <div class="card-index">
+                <span>{String(note.data.number).padStart(2, "0")}</span>
+                <span class="arrow" aria-hidden="true">↗</span>
+              </div>
+              <div class="card-main">
+                <div class="card-tags">
+                  <span>{note.data.mainIngredient}</span>
+                  {note.data.methods.map((method) => <span>{method}</span>)}
+                </div>
+                <h3>{note.data.title}</h3>
+                <p>{note.data.summary}</p>
+              </div>
+              {
+                (note.data.servings || note.data.time) && (
+                  <dl class="card-meta">
+                    {note.data.servings && (
+                      <div>
+                        <dt>Порции</dt>
+                        <dd>{String(note.data.servings).padStart(2, "0")}</dd>
+                      </div>
+                    )}
+                    {note.data.time && (
+                      <div>
+                        <dt>Время</dt>
+                        <dd>
+                          {note.data.time}
+                          <small> мин</small>
+                        </dd>
+                      </div>
+                    )}
+                  </dl>
+                )
+              }
+            </a>
+          ))
+        }
+      </div>
+
+      <p class="empty-state" id="empty-state" hidden>
+        Ничего не нашлось. Попробуйте другое слово.
+      </p>
+    </section>
+
+    <footer>
+      <span>Кухонные записки</span>
+      <span>Riga · 2026</span>
+    </footer>
+  </main>
+
+  <script>
+    const search = document.querySelector<HTMLInputElement>("#note-search");
+    const cards = [...document.querySelectorAll<HTMLElement>(".note-card")];
+    const methodFilters = [
+      ...document.querySelectorAll<HTMLButtonElement>(".method-filter"),
+    ];
+    const productFilters = [
+      ...document.querySelectorAll<HTMLButtonElement>(".product-filter"),
+    ];
+    const empty = document.querySelector<HTMLElement>("#empty-state");
+    let selectedMethod = "всё";
+    let selectedProduct = "всё";
+
+    const update = () => {
+      const query = search?.value.trim().toLocaleLowerCase("ru") ?? "";
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const matchesSearch = card.dataset.search?.includes(query) ?? true;
+        const matchesMethod =
+          selectedMethod === "всё" ||
+          card.dataset.methods?.split(" ").includes(selectedMethod);
+        const matchesProduct =
+          selectedProduct === "всё" ||
+          card.dataset.product === selectedProduct;
+        const show = matchesSearch && matchesMethod && matchesProduct;
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+
+      if (empty) empty.hidden = visible !== 0;
+    };
+
+    search?.addEventListener("input", update);
+
+    methodFilters.forEach((filter) => {
+      filter.addEventListener("click", () => {
+        selectedMethod = filter.dataset.method ?? "всё";
+        methodFilters.forEach((item) => {
+          const isActive = item === filter;
+          item.classList.toggle("active", isActive);
+          item.setAttribute("aria-pressed", String(isActive));
+        });
+        update();
+      });
+    });
+
+    productFilters.forEach((filter) => {
+      filter.addEventListener("click", () => {
+        selectedProduct = filter.dataset.product ?? "всё";
+        productFilters.forEach((item) => {
+          const isActive = item === filter;
+          item.classList.toggle("active", isActive);
+          item.setAttribute("aria-pressed", String(isActive));
+        });
+        update();
+      });
+    });
+  </script>
+</BaseLayout>

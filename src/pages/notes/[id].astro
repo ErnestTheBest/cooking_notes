@@ -1,0 +1,102 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const notes = await getCollection("notes");
+  return notes.map((note) => ({
+    params: { id: note.id },
+    props: { note },
+  }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+const homeHref = `${basePath}/`;
+const factCount =
+  Number(Boolean(note.data.servings)) +
+  Number(Boolean(note.data.time)) +
+  Number(note.data.equipment.length > 0);
+---
+
+<BaseLayout title={`${note.data.title} — Кухонные записки`} description={note.data.summary}>
+  <main>
+    <header class="site-header">
+      <a class="wordmark" href={homeHref} aria-label="Кухонные записки, главная">
+        КЗ<span aria-hidden="true">↗</span>
+      </a>
+      <a class="back-link" href={homeHref}>← Вернуться к поиску</a>
+    </header>
+
+    <article class="recipe">
+      <header class="recipe-header">
+        <div class="recipe-kicker">
+          <span>Запись {String(note.data.number).padStart(2, "0")}</span>
+          <span>{note.data.mainIngredient} / {note.data.methods.join(" / ")}</span>
+        </div>
+        <h1>{note.data.title}</h1>
+        <p>{note.data.summary}</p>
+      </header>
+
+      {
+        factCount > 0 && (
+          <div class="recipe-facts" style={`--fact-count: ${factCount}`}>
+            {note.data.servings && (
+              <div>
+                <span>Порции</span>
+                <strong>{String(note.data.servings).padStart(2, "0")}</strong>
+              </div>
+            )}
+            {note.data.time && (
+              <div>
+                <span>Время</span>
+                <strong>
+                  {note.data.time}
+                  <small> мин</small>
+                </strong>
+              </div>
+            )}
+            {note.data.equipment.length > 0 && (
+              <div class="fact-equipment">
+                <span>Оборудование</span>
+                <strong>{note.data.equipment.join(" · ")}</strong>
+              </div>
+            )}
+          </div>
+        )
+      }
+
+      <div class="recipe-layout">
+        <aside class="ingredients">
+          <div class="section-label">
+            <span>Ингредиенты</span>
+            <span>{String(note.data.ingredients.length).padStart(2, "0")}</span>
+          </div>
+          <ul>
+            {
+              note.data.ingredients.map((ingredient) => (
+                <li>
+                  <span>{ingredient.name}</span>
+                  <span>
+                    {ingredient.amount} {ingredient.unit}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </aside>
+
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+    </article>
+
+    <footer>
+      <span>Кухонные записки</span>
+      <a href={homeHref}>Все заметки ↑</a>
+      <span>Riga · 2026</span>
+    </footer>
+  </main>
+</BaseLayout>
