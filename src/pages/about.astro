@@ -39,12 +39,29 @@ const titles = [
       <header class="about-hero">
         <p class="eyebrow">Официально · окончательно · без права на обжалование</p>
         <h1>Эрнест —<br />лучший повар<br />всех времён</h1>
-        <div class="about-intro">
-          <span>Шеф № 01</span>
-          <p>
-            Кулинарный авторитет исключительной величины. Готовит уверенно,
-            пробует первым и ведёт точные записи для будущих поколений.
-          </p>
+        <div class="about-proof">
+          <figure class="about-portrait">
+            <img
+              src={`${basePath}/ernest-cooks.jpg`}
+              alt="Эрнест готовит у плиты с миской в руках"
+              width="960"
+              height="1280"
+              loading="eager"
+              fetchpriority="high"
+            />
+            <figcaption>Документальное подтверждение · Рига, 2026</figcaption>
+          </figure>
+          <div class="about-intro">
+            <span>Шеф № 01</span>
+            <p>
+              Кулинарный авторитет исключительной величины. Готовит уверенно,
+              пробует первым и ведёт точные записи для будущих поколений.
+            </p>
+            <small>
+              На снимке: редкий момент передачи блюда из мира идей
+              непосредственно на тарелку.
+            </small>
+          </div>
         </div>
       </header>
 
