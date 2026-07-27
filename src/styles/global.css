@@ -66,6 +66,32 @@ main {
   line-height: 1;
 }
 
+.site-nav {
+  display: flex;
+  gap: 26px;
+  align-items: center;
+}
+
+.site-nav a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+
+.site-nav a:not([aria-current="page"]) {
+  text-decoration: none;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible,
+.site-nav a[aria-current="page"] {
+  text-decoration-line: underline;
+}
+
+.site-nav a:focus-visible {
+  outline: 3px solid var(--black);
+  outline-offset: 4px;
+}
+
 .hero {
   padding: 80px 0 48px;
   border-bottom: 1px solid var(--line);
@@ -365,6 +391,154 @@ footer {
   text-underline-offset: 4px;
 }
 
+.about {
+  padding-top: 64px;
+}
+
+.about-hero {
+  padding-bottom: 68px;
+  border-bottom: 1px solid var(--line);
+}
+
+.about-hero h1 {
+  margin: 0;
+  max-width: 1450px;
+  font-family: var(--display);
+  font-size: clamp(54px, 8.8vw, 134px);
+  font-weight: 640;
+  letter-spacing: -0.075em;
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
+.about-intro {
+  display: grid;
+  grid-template-columns: 1fr minmax(300px, 650px);
+  gap: 40px;
+  align-items: start;
+  margin-top: 64px;
+}
+
+.about-intro > span {
+  font-family: var(--display);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.about-intro p {
+  margin: 0;
+  font-size: clamp(20px, 2.2vw, 32px);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.honours {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.72fr) minmax(520px, 1.28fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.honours-heading {
+  padding: 64px 52px 64px 0;
+  border-right: 1px solid var(--line);
+}
+
+.honours-heading h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(32px, 4vw, 62px);
+  font-weight: 560;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+
+.title-list {
+  margin: 0;
+  padding: 0 0 0 48px;
+  list-style: none;
+}
+
+.title-list li {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 20px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-bottom: 1px solid #a6a6a6;
+}
+
+.title-list li:last-child {
+  border-bottom: 0;
+}
+
+.title-list span {
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.title-list strong {
+  position: relative;
+  display: block;
+  font-size: clamp(17px, 1.65vw, 23px);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.title-list strong::before {
+  content: "•";
+  position: absolute;
+  left: -20px;
+}
+
+.jurisdiction {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.55fr) minmax(420px, 1.25fr) minmax(170px, 0.45fr);
+  gap: 40px;
+  align-items: start;
+  padding: 64px 0 70px;
+  background: var(--black);
+  color: var(--white);
+  box-shadow: 32px 0 0 var(--black), -32px 0 0 var(--black);
+}
+
+.jurisdiction .eyebrow {
+  color: #a9a9a9;
+}
+
+.jurisdiction h2 {
+  margin: 0 0 28px;
+  font-family: var(--display);
+  font-size: clamp(34px, 4.6vw, 70px);
+  font-weight: 560;
+  letter-spacing: -0.065em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.jurisdiction div p {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(17px, 1.7vw, 23px);
+  line-height: 1.5;
+}
+
+.jurisdiction-stamp {
+  margin: 0;
+  padding: 18px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(7deg);
+}
+
 .recipe {
   padding-top: 48px;
 }
@@ -601,6 +775,30 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .honours {
+    grid-template-columns: 1fr;
+  }
+
+  .honours-heading {
+    padding-right: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .title-list {
+    padding-left: 0;
+  }
+
+  .jurisdiction {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .jurisdiction-stamp {
+    grid-column: 2;
+    justify-self: start;
+    max-width: 170px;
+  }
+
   .ingredients {
     padding-right: 0;
     padding-bottom: 54px;
@@ -617,6 +815,11 @@ footer {
 @media (max-width: 560px) {
   .site-header {
     min-height: 70px;
+  }
+
+  .site-nav {
+    gap: 16px;
+    font-size: 9px;
   }
 
   .hero {
@@ -685,6 +888,43 @@ footer {
 
   .recipe {
     padding-top: 28px;
+  }
+
+  .about {
+    padding-top: 42px;
+  }
+
+  .about-hero {
+    padding-bottom: 44px;
+  }
+
+  .about-hero h1 {
+    font-size: clamp(43px, 13.8vw, 70px);
+  }
+
+  .about-intro {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin-top: 42px;
+  }
+
+  .honours-heading {
+    padding: 46px 0 40px;
+  }
+
+  .title-list li {
+    grid-template-columns: 34px 1fr;
+    gap: 16px;
+  }
+
+  .jurisdiction {
+    grid-template-columns: 1fr;
+    padding: 46px 0 52px;
+    box-shadow: 20px 0 0 var(--black), -20px 0 0 var(--black);
+  }
+
+  .jurisdiction-stamp {
+    grid-column: 1;
   }
 
   .recipe-header {

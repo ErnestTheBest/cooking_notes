@@ -26,7 +26,10 @@ const factCount =
       <a class="wordmark" href={homeHref} aria-label="Кухонные записки, главная">
         КЗ<span aria-hidden="true">↗</span>
       </a>
-      <a class="back-link" href={homeHref}>← Вернуться к поиску</a>
+      <nav class="site-nav" aria-label="Основная навигация">
+        <a class="back-link" href={homeHref}>← К заметкам</a>
+        <a href={`${basePath}/about/`}>О поваре</a>
+      </nav>
     </header>
 
     <article class="recipe">

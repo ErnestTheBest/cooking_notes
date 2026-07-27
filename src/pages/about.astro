@@ -1,0 +1,90 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+const homeHref = `${basePath}/`;
+
+const titles = [
+  "Лучший повар всех времён и народов",
+  "Абсолютный чемпион домашней кухни",
+  "Верховный главнокомандующий сковородой",
+  "Пожизненный обладатель трёх домашних звёзд",
+  "Гранд-мастер завтраков, обедов и поздних перекусов",
+  "Кавалер ордена идеально разогретой сковороды",
+  "Повелитель омлетов и укротитель сливочного масла",
+  "Заслуженный архитектор бутербродов",
+  "Человек года по версии собственного холодильника",
+  "Бессменный шеф-повар, су-шеф и главный дегустатор",
+  "Обладатель золотого половника за совокупность заслуг",
+  "Легенда кухни районного, городского и галактического масштаба",
+];
+---
+
+<BaseLayout
+  title="Эрнест — лучший повар всех времён и народов"
+  description="Официальная страница кулинарного величия Эрнеста. Действует только в пределах его квартиры и не согласована с Алисой."
+>
+  <main>
+    <header class="site-header">
+      <a class="wordmark" href={homeHref} aria-label="Кухонные записки, главная">
+        КЗ<span aria-hidden="true">↗</span>
+      </a>
+      <nav class="site-nav" aria-label="Основная навигация">
+        <a href={homeHref}>Все заметки</a>
+        <a href={`${basePath}/about/`} aria-current="page">О поваре</a>
+      </nav>
+    </header>
+
+    <article class="about">
+      <header class="about-hero">
+        <p class="eyebrow">Официально · окончательно · без права на обжалование</p>
+        <h1>Эрнест —<br />лучший повар<br />всех времён</h1>
+        <div class="about-intro">
+          <span>Шеф № 01</span>
+          <p>
+            Кулинарный авторитет исключительной величины. Готовит уверенно,
+            пробует первым и ведёт точные записи для будущих поколений.
+          </p>
+        </div>
+      </header>
+
+      <section class="honours" aria-labelledby="honours-title">
+        <div class="honours-heading">
+          <p class="eyebrow">Награды и регалии</p>
+          <h2 id="honours-title">Полный список<br />титулов</h2>
+        </div>
+
+        <ul class="title-list">
+          {
+            titles.map((title, index) => (
+              <li>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{title}</strong>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <aside class="jurisdiction" aria-labelledby="jurisdiction-title">
+        <p class="eyebrow">Важное уточнение мелким, но заметным шрифтом</p>
+        <div>
+          <h2 id="jurisdiction-title">Юрисдикция величия</h2>
+          <p>
+            Все перечисленные звания, награды и безоговорочные заявления
+            распространяются исключительно в пределах квартиры Эрнеста.
+            К международному признанию отношения не имеют и с Алисой
+            не согласованы.
+          </p>
+        </div>
+        <p class="jurisdiction-stamp">Действительно<br />до первого спора</p>
+      </aside>
+    </article>
+
+    <footer>
+      <span>Кухонные записки</span>
+      <a href={homeHref}>Все заметки ↑</a>
+      <span>Riga · 2026</span>
+    </footer>
+  </main>
+</BaseLayout>
