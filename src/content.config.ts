@@ -11,7 +11,9 @@ const notes = defineCollection({
     servings: z.number().optional(),
     time: z.number().optional(),
     mainIngredient: z.string(),
-    methods: z.array(z.enum(["жарка", "запекание", "сувид", "варка"])),
+    methods: z.array(
+      z.enum(["жарка", "запекание", "сувид", "варка", "тушение"]),
+    ),
     equipment: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
     ingredients: z.array(
